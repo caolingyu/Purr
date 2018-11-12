@@ -1,0 +1,2 @@
+python ./train.py ./data/train.csv ./data/vocab.csv conv_attn 200
+# python ./training.py ./data/data/train.csv ./data/data/vocab.csv chained_conv_attn 200 --gpu --batch-size 32 --embed-file ./data/data/processed.embed
