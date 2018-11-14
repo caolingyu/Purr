@@ -84,5 +84,5 @@ if __name__ == "__main__":
     build_vocab.build_vocab(vocab_min, train_file, vname)
 
     # train word embeddings
-    # w2v_file = word_embeddings.word_embeddings(train_file, 100, 0, 5)
-    # extract_wvs.gensim_to_embeddings("{}processed.w2v".format(DATA_DIR), "{}vocab.csv".format(DATA_DIR))
+    w2v_file = word_embeddings.word_embeddings(train_file, 100, 0, 5)
+    extract_wvs.gensim_to_embeddings("{}processed.w2v".format(DATA_DIR), "{}vocab.csv".format(DATA_DIR))

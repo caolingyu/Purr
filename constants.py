@@ -8,7 +8,7 @@ MAX_LENGTH = 10000
 
 # Where to save the model
 MODEL_DIR = "./saved_models/treatment_type/"
-DATA_DIR = "./data/treatment_type/"
+DATA_DIR = "./data/"
 
 for item in [MODEL_DIR, DATA_DIR]:
     if not os.path.exists(item):

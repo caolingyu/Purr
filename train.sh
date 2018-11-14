@@ -1,2 +1,1 @@
-CUDA_VISIBLE_DEVICES=1 python ./train.py ./data/article_type/train.csv ./data/article_type/vocab.csv conv_attn 200 --gpu --batch-size 32
-CUDA_VISIBLE_DEVICES=1 python ./train.py ./data/treatment_type/train.csv ./data/treatment_type/vocab.csv conv_attn 200 --gpu --batch-size 32
+python ./train.py ./data/train.csv ./data/vocab.csv conv_attn 200 --gpu --batch-size 32

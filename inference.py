@@ -10,15 +10,15 @@ from torch.autograd import Variable
 from tqdm import tqdm
 
 # Define some constants
-MODEL_DIR = "./saved_models/conv_attn_Nov_12_07:16/model_best_f1_micro.pth"
+MODEL_DIR = "./saved_models/your_model"
 VOCAB_FILE = "./data/vocab.csv"
 LABEL_FILE = "./data/label_list.csv"
 EMBED_FILE = None
 FILTER_SIZE = 4
 NUM_FILTER_MAPS = 500
 GPU = False
-EMBED_SIZE = 100
-BATCH_SIZE = 128
+EMBED_SIZE = 200
+BATCH_SIZE = 32
 
 
 def load_label_list(label_list):
