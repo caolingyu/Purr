@@ -10,6 +10,7 @@ import operator
 
 from collections import defaultdict
 from scipy.sparse import csr_matrix
+from tqdm import tqdm
 
 from constants import DATA_DIR
 
@@ -20,7 +21,7 @@ def build_vocab(vocab_min, infile, vocab_filename):
             infile: (training) data file to build vocabulary from
             vocab_filename: name for the file to output
     """
-    with open(infile, 'r') as csvfile:
+    with open(infile, "r") as csvfile:
         reader = csv.reader(csvfile)
         # header
         next(reader)
@@ -40,9 +41,9 @@ def build_vocab(vocab_min, infile, vocab_filename):
         # build lookup table for terms
         num2term = {}
         # preallocate array to hold number of notes each term appears in
-        note_occur = np.zeros(400000, dtype=int)
+        note_occur = np.zeros(10000000, dtype=int)
         i = 0
-        for row in reader:
+        for row in tqdm(reader):
             text = row[0]
             numwords = 0
             for term in text.split():
@@ -68,7 +69,7 @@ def build_vocab(vocab_min, infile, vocab_filename):
 
         # 1. create sparse document matrix
         C = csr_matrix((data, indices, note_inds), dtype=int).transpose()
-        #also need the numwords array to be a sparse matrix
+        # also need the numwords array to be a sparse matrix
         note_numwords = csr_matrix(1. / np.array(note_numwords))
         
         # 2. remove rows with less than 3 total occurrences
@@ -82,7 +83,7 @@ def build_vocab(vocab_min, infile, vocab_filename):
         vocab_list = vocab_list[inds]
 
         print("writing output")
-        with open(vocab_filename, 'w') as vocab_file:
+        with open(vocab_filename, "w") as vocab_file:
             for word in vocab_list:
                 vocab_file.write(word + "\n")
 

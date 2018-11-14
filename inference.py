@@ -1,11 +1,11 @@
 # coding = utf-8
-import torch
 import datasets
+from models import Conv_Attn
+
+import torch
 import numpy as np
 import csv
 from collections import defaultdict
-from models import Conv_Attn
-from constants import *
 from torch.autograd import Variable
 from tqdm import tqdm
 
@@ -58,7 +58,7 @@ ind2l = load_label_list(LABEL_FILE)
 l2ind = {l:i for i,l in ind2l.items()}
 dicts = (ind2w, w2ind, ind2l, l2ind)
 
-model = torch.load(MODEL_DIR)
+model = torch.load(MODEL_DIR, map_location="cpu")
 
 
 def do_inference(data):

@@ -211,7 +211,7 @@ def test(model, epoch, batch_size, data_path, fold, gpu, dicts, freq_params, mod
             target = target.cuda()
         model.zero_grad()
 
-        output, loss, _ = model(data, target) # 适用于conv_attn模型
+        output, loss, _ = model(data, target) # for conv_attn model
 
         output = output.data.cpu().numpy()
         losses.append(loss.data[0])

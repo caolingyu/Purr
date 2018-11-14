@@ -57,16 +57,16 @@ class Conv_Attn(BaseModel):
     def __init__(self, Y, embed_file, kernel_size, num_filter_maps, gpu, dicts, embed_size=100, dropout=0.5):
         super(Conv_Attn, self).__init__(Y, embed_file, dicts, dropout=dropout, gpu=gpu, embed_size=embed_size)
 
-        # initialize conv layer as in 2.1
+        # initialize conv layer
         self.conv = nn.Conv1d(self.embed_size, num_filter_maps, kernel_size=kernel_size, padding=int(kernel_size/2))
         xavier_uniform(self.conv.weight)
 
-        # context vectors for computing attention as in 2.2
+        # context vectors for computing attention
         self.U = nn.Linear(num_filter_maps, Y)
         self.U.bias.data.fill_(0)
         self.U.bias.requires_grad = False
 
-        # final layer: create a matrix to use for the L binary classifiers as in 2.3
+        # final layer: create a matrix to use for the L binary classifiers
         if gpu:
             self.final = Variable(torch.zeros((Y, num_filter_maps)).cuda())
             self.final_bias = Variable(torch.zeros(Y).cuda())

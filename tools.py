@@ -44,5 +44,4 @@ def make_param_dict(args):
 
 def get_num_labels():
     num_labels = LABEL_SIZE
-
     return num_labels

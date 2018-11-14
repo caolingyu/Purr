@@ -1,6 +1,8 @@
 # coding = utf-8
 import sys
 sys.path.append('../')
+import argparse
+
 import datasets
 from preprocess import build_vocab, word_embeddings, extract_wvs
 from constants import DATA_DIR
@@ -35,7 +37,7 @@ def raw_to_csv(f_in, f_out):
                     for item in prev_value.split("\n"):
                         if item and item not in label:
                             label.append(item)
-                    writer.writerow([prev_key, " ".join(label), len(prev_key)])
+                    writer.writerow([prev_key, "|".join(label), len(prev_key)])
                     prev_value = ""
                     count += 1
             prev_key = cur_key
@@ -44,7 +46,12 @@ def raw_to_csv(f_in, f_out):
 
 
 if __name__ == "__main__":
-    f_in = "{}raw_data".format(DATA_DIR)
+    parser = argparse.ArgumentParser(description="preprocess data")
+    parser.add_argument("data_path", type=str)
+    args = parser.parse_args()
+
+    # f_in = "{}raw_data".format(DATA_DIR)
+    f_in = args.data_path
     f_out = "{}data.csv".format(DATA_DIR)
     raw_to_csv(f_in, f_out)
 
@@ -53,24 +60,29 @@ if __name__ == "__main__":
 
     df = pd.read_csv(f_out, engine="python")
     train, test = train_test_split(df, test_size=0.2)
-    train = train.sort_values(["length"])
-    test = test.sort_values(["length"])
+    train = train.sample(frac=1)
+    test = test.sample(frac=1)
+    # train = train.sort_values(["length"])
+    # test = test.sort_values(["length"])
+
     train.to_csv(train_file, index=False)
     test.to_csv(test_file, index=False)
 
     label_list_raw = train["label"].value_counts().index.values
     label_list = set()
     for item in label_list_raw:
-        for l in item.split():
+        for l in item.split("|"):
             label_list.add(l)
-    with open('{}label_list.csv'.format(DATA_DIR), 'w') as of:
+    with open("{}label_list.csv".format(DATA_DIR), "w") as of:
         w = csv.writer(of)
         for label in label_list:
             w.writerow([label])
 
+    # build vocabulary
     vocab_min = 3
     vname = "{}vocab.csv".format(DATA_DIR)
     build_vocab.build_vocab(vocab_min, train_file, vname)
 
-    w2v_file = word_embeddings.word_embeddings(train_file, 100, 0, 5)
-    extract_wvs.gensim_to_embeddings("{}processed.w2v".format(DATA_DIR), "{}vocab.csv".format(DATA_DIR))
+    # train word embeddings
+    # w2v_file = word_embeddings.word_embeddings(train_file, 100, 0, 5)
+    # extract_wvs.gensim_to_embeddings("{}processed.w2v".format(DATA_DIR), "{}vocab.csv".format(DATA_DIR))

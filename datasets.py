@@ -31,7 +31,7 @@ class Batch:
         labelled = False
 
         # get labels as a multi-hot vector
-        for l in row[1].split():
+        for l in row[1].split("|"):
             if l in l2ind.keys():
                 label = int(l2ind[l])
                 labels_idx[label] = 1
@@ -44,13 +44,14 @@ class Batch:
         # truncate long documents
         if len(text) > self.max_length:
             text = text[:self.max_length]
+            length = self.max_length
 
         # build instance
         self.docs.append(text)
         self.labels.append(labels_idx)
 
         # reset length
-        self.length = min(self.max_length, length)
+        self.length = max(self.length, length)
 
         self.raw_text.append(row[0])
 
@@ -65,7 +66,6 @@ class Batch:
 
     def to_ret(self):
         return np.array(self.docs), np.array(self.labels), self.raw_text
-
 
 
 def data_generator(filename, dicts, batch_size, num_labels):
